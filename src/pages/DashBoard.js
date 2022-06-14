@@ -1,9 +1,15 @@
-import React from 'react'
+import React from "react";
+import TicketCard from "../components/TicketCard";
 
 const DashBoard = () => {
   return (
-    <div>DashBoard page</div>
-  )
-}
+    <div className="dashboard">
+      <h1>My Projects</h1>
+      <div className="ticket-container">
+        <TicketCard />
+      </div>
+    </div>
+  );
+};
 
-export default DashBoard
+export default DashBoard;
