@@ -1,9 +1,13 @@
-import React from 'react'
+const DeleteBlock = ({ documentId }) => {
+  const deleteTicket = async () => {};
 
-function DeleteBlock() {
   return (
-    <div>DeleteBlock</div>
-  )
-}
+    <div className="delete-block">
+      <div className="delete-icon" onClick={deleteTicket}>
+        ✖
+      </div>
+    </div>
+  );
+};
 
-export default DeleteBlock
+export default DeleteBlock;
