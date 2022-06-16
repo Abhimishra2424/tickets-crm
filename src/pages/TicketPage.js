@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import categoriesContext from "../context";
+
 const TicketPage = () => {
+  const { categories, setCategories } = useContext(categoriesContext);
+
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     status: "not started",
     progress: 0,
@@ -16,14 +21,12 @@ const TicketPage = () => {
     e.preventDefault();
 
     if (!editMode) {
-      // create ticket
       const response = await axios.post("http://localhost:5000/tickets", {
         formData,
       });
       const success = response.status === 200;
       if (success) {
-        console.log("ticket created");
-        // navigate("/");
+        navigate("/");
       }
     }
   };
@@ -38,9 +41,6 @@ const TicketPage = () => {
     }));
   };
 
-  console.log(formData);
-
-  const categories = ["not started", "in progress"];
 
   return (
     <div className="ticket">

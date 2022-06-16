@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TicketCard from "../components/TicketCard";
 import axios from "axios";
 
+import categoriesContext from "../context";
+
 const DashBoard = () => {
   const [tickets, setTickets] = React.useState([]);
+  const { categories, setCategories } = useContext(categoriesContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,7 +34,6 @@ const DashBoard = () => {
       });
 
       setTickets(formattedArray);
-
     }
     fetchData();
   }, []);
