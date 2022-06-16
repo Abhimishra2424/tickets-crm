@@ -1,11 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import categoriesContext from "../context";
-
 const TicketPage = () => {
-  const { categories, setCategories } = useContext(categoriesContext);
+  const [tickets, setTickets] = useState([]);
 
   const navigate = useNavigate();
 
@@ -31,6 +29,27 @@ const TicketPage = () => {
     }
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("http://localhost:5000/tickets");
+      const dataObject = response.data.data;
+      const arrayOfKeys = Object.keys(dataObject);
+      const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);
+      let formattedArray = [];
+      arrayOfKeys.forEach((key, index) => {
+        const formmatedData = { ...arrayOfData[index] };
+        formmatedData["documentId"] = key;
+        formattedArray.push(formmatedData);
+      });
+      setTickets(formattedArray);
+    }
+    fetchData();
+  }, []);
+
+  const uniqueCategories = [
+    ...new Set(tickets?.map(({ category }) => category)),
+  ];
+
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -40,7 +59,6 @@ const TicketPage = () => {
       [name]: value,
     }));
   };
-
 
   return (
     <div className="ticket">
@@ -72,7 +90,7 @@ const TicketPage = () => {
               value={formData.category}
               onChange={handleChange}
             >
-              {categories?.map((category, _index) => (
+              {uniqueCategories?.map((category, _index) => (
                 <option key={_index} value={category}>
                   {category}
                 </option>

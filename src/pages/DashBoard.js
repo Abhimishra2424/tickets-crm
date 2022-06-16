@@ -1,39 +1,26 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TicketCard from "../components/TicketCard";
 import axios from "axios";
 
-import categoriesContext from "../context";
-
 const DashBoard = () => {
-  const [tickets, setTickets] = React.useState([]);
-  const { categories, setCategories } = useContext(categoriesContext);
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     async function fetchData() {
       const response = await axios.get("http://localhost:5000/tickets");
-
-      //wasn't sure how to get the Documet Id with the object.. open to better suggestions
       const dataObject = response.data.data;
-
-      console.log("dataObject", dataObject);
-
       const arrayOfKeys = Object.keys(dataObject);
       const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);
-
-      console.log("arrayOfKeys", arrayOfKeys);
-      console.log("arrayOfData", arrayOfData);
-
       let formattedArray = [];
-
       arrayOfKeys.forEach((key, index) => {
         const formmatedData = { ...arrayOfData[index] };
         formmatedData["documentId"] = key;
-
-        console.log("formmatedData", formmatedData);
         formattedArray.push(formmatedData);
       });
-
       setTickets(formattedArray);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -42,28 +29,44 @@ const DashBoard = () => {
     ...new Set(tickets?.map(({ category }) => category)),
   ];
 
-  return (
-    <div className="dashboard">
-      <h1>My Projects</h1>
-      <div className="ticket-container">
-        {tickets &&
-          uniqueCategories?.map((uniqueCategory, categoryIndex) => (
-            <div key={categoryIndex}>
-              <h3>{uniqueCategory}</h3>
-              {tickets
-                .filter((t) => t.category === uniqueCategory)
-                .map((filteredTicket, _index) => (
-                  <TicketCard
-                    id={_index}
-                    color={filteredTicket.color}
-                    ticket={filteredTicket}
-                  />
-                ))}
-            </div>
-          ))}
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontSize: "2rem",
+        }}
+      >
+        Loading...
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="dashboard">
+        <h1>My Projects</h1>
+        <div className="ticket-container">
+          {tickets &&
+            uniqueCategories?.map((uniqueCategory, categoryIndex) => (
+              <div key={categoryIndex}>
+                <h3>{uniqueCategory}</h3>
+                {tickets
+                  .filter((t) => t.category === uniqueCategory)
+                  .map((filteredTicket, _index) => (
+                    <TicketCard
+                      id={_index}
+                      color={filteredTicket.color}
+                      ticket={filteredTicket}
+                    />
+                  ))}
+              </div>
+            ))}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default DashBoard;
