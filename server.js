@@ -13,10 +13,27 @@ app.use(express.json());
 const This_is_url_for_make_collection =
   process.env.This_is_url_for_make_collection;
 
-//   creating a new ticket URl
-const CREATE_TICKET = process.env.CREATE_TICKET;
+
+const url = process.env.URL;
 
 const token = process.env.ASTRA_TOKEN;
+
+app.get("/tickets", async (req, res) => {
+  const options = {
+    method: "GET",
+    headers: {
+      Accept: "application/json",
+      "X-Cassandra-Token": token,
+    },
+  };
+  try {
+    const response = await axios(`${url}?page-size=20`, options);
+    res.status(200).json(response.data);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err });
+  }
+});
 
 app.post("/tickets", async (req, res) => {
   const formData = req.body.formData;
@@ -32,7 +49,7 @@ app.post("/tickets", async (req, res) => {
   };
 
   try {
-    const response = await axios(CREATE_TICKET, options);
+    const response = await axios(url, options);
     res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
