@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -29,7 +29,7 @@ const TicketPage = ({ editMode }) => {
     } else {
       // if editmode is true, then update the ticket
       const response = await axios.put(`http://localhost:5000/tickets/${id}`, {
-         data: formData,
+        data: formData,
       });
       const success = response.status === 200;
       if (success) {
@@ -49,6 +49,7 @@ const TicketPage = ({ editMode }) => {
     if (editMode) {
       fetchDatabyID();
     }
+    // eslint-disable-next-line
   }, []);
 
   // fetch the tickets from the server and set them to the state of categorys
@@ -136,6 +137,7 @@ const TicketPage = ({ editMode }) => {
                 type="radio"
                 onChange={handleChange}
                 value={1}
+                // eslint-disable-next-line
                 checked={formData.priority == 1}
               />
               <label htmlFor="priority-1">1</label>
@@ -145,6 +147,7 @@ const TicketPage = ({ editMode }) => {
                 type="radio"
                 onChange={handleChange}
                 value={2}
+                // eslint-disable-next-line
                 checked={formData.priority == 2}
               />
               <label htmlFor="priority-2">2</label>
@@ -154,6 +157,7 @@ const TicketPage = ({ editMode }) => {
                 type="radio"
                 onChange={handleChange}
                 value={3}
+                // eslint-disable-next-line
                 checked={formData.priority == 3}
               />
               <label htmlFor="priority-3">3</label>
@@ -163,6 +167,7 @@ const TicketPage = ({ editMode }) => {
                 type="radio"
                 onChange={handleChange}
                 value={4}
+                // eslint-disable-next-line
                 checked={formData.priority == 4}
               />
               <label htmlFor="priority-4">4</label>
@@ -172,6 +177,7 @@ const TicketPage = ({ editMode }) => {
                 type="radio"
                 onChange={handleChange}
                 value={5}
+                // eslint-disable-next-line
                 checked={formData.priority == 5}
               />
               <label htmlFor="priority-5">5</label>
@@ -240,6 +246,7 @@ const TicketPage = ({ editMode }) => {
             />
             <div className="img-preview">
               {formData.avatar && (
+                // eslint-disable-next-line
                 <img src={formData.avatar} alt="image preview" />
               )}
             </div>
