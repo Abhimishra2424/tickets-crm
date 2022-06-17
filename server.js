@@ -13,7 +13,6 @@ app.use(express.json());
 const This_is_url_for_make_collection =
   process.env.This_is_url_for_make_collection;
 
-
 const url = process.env.URL;
 
 const token = process.env.ASTRA_TOKEN;
@@ -50,6 +49,25 @@ app.post("/tickets", async (req, res) => {
 
   try {
     const response = await axios(url, options);
+    res.status(200).json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete("/tickets/:documentId", async (req, res) => {
+  const id = req.params.documentId;
+
+  const options = {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "X-Cassandra-Token": token,
+    },
+  };
+
+  try {
+    const response = await axios(`${url}/${id}`, options);
     res.status(200).json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
