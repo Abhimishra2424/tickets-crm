@@ -9,7 +9,7 @@ const DashBoard = () => {
   useEffect(() => {
     setLoading(true);
     async function fetchData() {
-      const response = await axios.get("http://localhost:5000/tickets");
+      const response = await axios.get("https://ticket-api-nodejs.herokuapp.com/tickets");
       const dataObject = response.data.data;
       const arrayOfKeys = Object.keys(dataObject);
       const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);

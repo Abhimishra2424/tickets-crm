@@ -19,7 +19,7 @@ const TicketPage = ({ editMode }) => {
 
     // if editmode is false, then create a new ticket
     if (!editMode) {
-      const response = await axios.post("http://localhost:5000/tickets", {
+      const response = await axios.post("https://ticket-api-nodejs.herokuapp.com/tickets", {
         formData,
       });
       const success = response.status === 200;
@@ -28,7 +28,7 @@ const TicketPage = ({ editMode }) => {
       }
     } else {
       // if editmode is true, then update the ticket
-      const response = await axios.put(`http://localhost:5000/tickets/${id}`, {
+      const response = await axios.put(`https://ticket-api-nodejs.herokuapp.com/tickets/${id}`, {
         data: formData,
       });
       const success = response.status === 200;
@@ -40,7 +40,7 @@ const TicketPage = ({ editMode }) => {
 
   // fecth the ticket data from the server with the id from the url
   const fetchDatabyID = async () => {
-    const response = await axios.get(`http://localhost:5000/tickets/${id}`);
+    const response = await axios.get(`https://ticket-api-nodejs.herokuapp.com/tickets/${id}`);
     setFormData(response.data.data);
   };
 
@@ -55,7 +55,7 @@ const TicketPage = ({ editMode }) => {
   // fetch the tickets from the server and set them to the state of categorys
   useEffect(() => {
     async function fetchData() {
-      const response = await axios.get("http://localhost:5000/tickets");
+      const response = await axios.get("https://ticket-api-nodejs.herokuapp.com/tickets");
       const dataObject = response.data.data;
       const arrayOfKeys = Object.keys(dataObject);
       const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);

@@ -3,7 +3,7 @@ import axios from "axios";
 const DeleteBlock = ({ documentId }) => {
   const deleteTicket = async () => {
     const res = await axios.delete(
-      `http://localhost:5000/tickets/${documentId}`
+      `https://ticket-api-nodejs.herokuapp.com/tickets/${documentId}`
     );
 
     const success = res.status === 200;
