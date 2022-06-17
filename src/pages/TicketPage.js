@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const TicketPage = () => {
+const TicketPage = ({ editMode }) => {
   const [tickets, setTickets] = useState([]);
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [formData, setFormData] = useState({
     status: "not started",
     progress: 0,
     timestamp: new Date().toISOString(),
   });
-
-  const editMode = false;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +27,20 @@ const TicketPage = () => {
       }
     }
   };
+
+  // const fetchDatabyID = async () => {
+  //   const response = await axios.get(`http://localhost:5000/tickets/${id}`);
+  //   const dataObject = response.data.data;
+  //   const arrayOfKeys = Object.keys(dataObject);
+  //   const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);
+  //   let formattedArray = [];
+  //   arrayOfKeys.forEach((key, index) => {
+  //     const formmatedData = { ...arrayOfData[index] };
+  //     formmatedData["documentId"] = key;
+  //     formattedArray.push(formmatedData);
+  //   }
+  //   // setTickets(formattedArray);
+  // }
 
   useEffect(() => {
     async function fetchData() {
