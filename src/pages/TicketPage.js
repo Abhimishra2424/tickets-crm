@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -17,6 +17,7 @@ const TicketPage = ({ editMode }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // if editmode is false, then create a new ticket
     if (!editMode) {
       const response = await axios.post("http://localhost:5000/tickets", {
         formData,
@@ -25,23 +26,32 @@ const TicketPage = ({ editMode }) => {
       if (success) {
         navigate("/");
       }
+    } else {
+      // if editmode is true, then update the ticket
+      const response = await axios.put(`http://localhost:5000/tickets/${id}`, {
+         data: formData,
+      });
+      const success = response.status === 200;
+      if (success) {
+        navigate("/");
+      }
     }
   };
 
-  // const fetchDatabyID = async () => {
-  //   const response = await axios.get(`http://localhost:5000/tickets/${id}`);
-  //   const dataObject = response.data.data;
-  //   const arrayOfKeys = Object.keys(dataObject);
-  //   const arrayOfData = Object.keys(dataObject).map((key) => dataObject[key]);
-  //   let formattedArray = [];
-  //   arrayOfKeys.forEach((key, index) => {
-  //     const formmatedData = { ...arrayOfData[index] };
-  //     formmatedData["documentId"] = key;
-  //     formattedArray.push(formmatedData);
-  //   }
-  //   // setTickets(formattedArray);
-  // }
+  // fecth the ticket data from the server with the id from the url
+  const fetchDatabyID = async () => {
+    const response = await axios.get(`http://localhost:5000/tickets/${id}`);
+    setFormData(response.data.data);
+  };
 
+  // if editMode is true, fetch the data from the server for the ticket with the id
+  useEffect(() => {
+    if (editMode) {
+      fetchDatabyID();
+    }
+  }, []);
+
+  // fetch the tickets from the server and set them to the state of categorys
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get("http://localhost:5000/tickets");
@@ -59,6 +69,7 @@ const TicketPage = ({ editMode }) => {
     fetchData();
   }, []);
 
+  // get unique categories from the tickets and set them to the state of categories
   const uniqueCategories = [
     ...new Set(tickets?.map(({ category }) => category)),
   ];
